@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -15,6 +16,8 @@ const (
 	ApacheCombinedLog = "%s - %s [%s] \"%s %s %s\" %d %d \"%s\" \"%s\""
 	// ApacheErrorLog : [{timestamp}] [{module}:{severity}] [pid {pid}:tid {thread-id}] [client %{client}:{port}] %{message}
 	ApacheErrorLog = "[%s] [%s:%s] [pid %d:tid %d] [client %s:%d] %s"
+	// RFC931Log : "{host}","-","apache","{auth-user-id}",{datetime},"{method} {request} {protocol}" {response-code} {bytes}
+	RFC931Log = "\"%s\",\"%s\",\"%s\",%s,\"%s %s %s\",%d,%d"
 	// RFC3164Log : <priority>{timestamp} {hostname} {application}[{pid}]: {message}
 	RFC3164Log = "<%d>%s %s %s[%d]: %s"
 	// RFC5424Log : <priority>{version} {iso-timestamp} {hostname} {application} {pid} {message-id} {structured-data} {message}
@@ -69,6 +72,22 @@ func NewApacheErrorLog(t time.Time) string {
 		gofakeit.IPv4Address(),
 		gofakeit.Number(1, 65535),
 		gofakeit.HackerPhrase(),
+	)
+}
+
+// NewRFC931Log creates a log stringwith syslog (RFC931) format
+func NewRFC931Log(t time.Time) string {
+	return fmt.Sprintf(
+		RFC931Log,
+		gofakeit.IPv4Address(),
+		"-",
+		"apache",
+		strconv.FormatInt(time.Now().Unix(), 10),
+		gofakeit.HTTPMethod(),
+		RandResourceURI(),
+		RandHTTPVersion(),
+		gofakeit.StatusCode(),
+		gofakeit.Number(0, 30000),
 	)
 }
 

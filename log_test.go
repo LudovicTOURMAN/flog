@@ -43,6 +43,17 @@ func ExampleNewApacheErrorLog() {
 	// Output: [Sun Apr 22 09:30:00 2018] [quia:crit] [pid 4214:tid 6037] [client 90.151.9.107:14075] Copying the protocol won't do anything, we need to copy the redundant SAS program!
 }
 
+func ExampleNewRFC931Log() {
+	rand.Seed(11)
+
+	monkey.Patch(time.Now, func() time.Time { return stopped })
+	defer monkey.Unpatch(time.Now)
+
+	created := time.Now()
+	fmt.Println(NewRFC931Log(created))
+	// Output: "222.83.191.222","-","apache",1524389400,"POST /streamline/systems HTTP/1.1",502,3051
+
+}
 func ExampleNewRFC3164Log() {
 	rand.Seed(11)
 
