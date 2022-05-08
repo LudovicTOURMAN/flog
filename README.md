@@ -92,6 +92,7 @@ $ flog -f rfc3164 -l
 - Apache common
 - Apache combined
 - Apache error
+- RFC931
 - RFC3164
 - RFC5424
 - Common log fomat
